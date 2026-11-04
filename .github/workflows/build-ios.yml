@@ -1,0 +1,43 @@
+name: Build iPhone IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'NumraTelefoni/**'
+      - 'NumraTelefoni.xcodeproj/**'
+      - 'tests/**'
+      - '.github/workflows/build-ios.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check tools
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Run search tests on synthetic data
+        run: |
+          mkdir -p build
+          swiftc NumraTelefoni/SearchQuery.swift NumraTelefoni/Database.swift tests/main.swift -lsqlite3 -o build/search-tests
+          ./build/search-tests
+      - name: Build unsigned iPhone application
+        run: |
+          xcodebuild -project NumraTelefoni.xcodeproj -scheme NumraTelefoni -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' build
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p dist/Payload
+          cp -R build/DerivedData/Build/Products/Release-iphoneos/NumraTelefoni.app dist/Payload/
+          cd dist
+          /usr/bin/ditto -c -k --sequesterRsrc --keepParent Payload NumraTelefoni-unsigned.ipa
+          unzip -t NumraTelefoni-unsigned.ipa
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NumraTelefoni-iPhone-unsigned
+          path: dist/NumraTelefoni-unsigned.ipa
+          retention-days: 7
+          if-no-files-found: error
