@@ -1,0 +1,13 @@
+*.db
+*.db-*
+*.xlsx
+*.csv
+*.ipa
+*.p12
+*.mobileprovision
+DerivedData/
+build/
+dist/
+Payload/
+xcuserdata/
+.DS_Store
