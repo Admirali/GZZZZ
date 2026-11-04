@@ -5,11 +5,14 @@ përdorin SQLite-n lokale të pajisjes; nuk ka shërbim në internet ose API
 për të dhënat. Importohet e njëjta `allphone_perditesuar.db` e përgatitur
 për Android. Baza nuk përfshihet në projekt ose në ndërtimin cloud.
 
-**Gjendja e dorëzimit:** është krijuar kodi, projekti Xcode dhe konfigurimi
-për ndërtim në GitHub Actions. Nuk është ndërtuar ose nënshkruar ende një
-IPA dhe nuk është provuar në iPhone. Windows-i i këtij sesioni nuk ka
-Xcode/SDK iOS. Kontrollet lokale janë vetëm strukturore; testet Swift dhe
-kompilimi ekzekutohen nga workflow në macOS.
+**Gjendja e dorëzimit:** aplikacioni u kompilua me sukses në GitHub Actions
+në macOS. Kaluan 32 teste Swift/SQLite me të dhëna sintetike dhe u paketua
+`NumraTelefoni-unsigned.ipa` për pajisje arm64 me iOS 16+. IPA-ja nuk është
+nënshkruar me llogarinë e përdoruesit dhe nuk është provuar ende në iPhone
+fizik. Struktura e IPA-së dhe integriteti i ZIP-it u kontrolluan edhe në PC.
+
+[Ndërtimi i verifikuar](https://github.com/Admirali/GZZZZ/actions/runs/41901681486)
+nga commit `c98808ea6171db543c3568a85ecc6b42f11a4fe9`.
 
 ## Ndërtimi nga Windows, pa pasur një Mac
 
